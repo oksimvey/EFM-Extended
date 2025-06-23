@@ -1,0 +1,52 @@
+{
+  "collider": {
+    "number": 3,
+    "size": [
+      0.4,
+      0.4,
+      0.8
+    ],
+    "center": [
+      0.0,
+      0.0,
+      -0.75
+    ]
+  },
+  "hit_particle": "epicfight:cut",
+  "hit_sound": "epicfight:entity.hit.blade",
+  "livingmotion_modifier": {
+    "one_hand": {
+      "idle": "epicfight:biped/living/hold_longsword",
+      "run": "epicfight:biped/living/hold_longsword",
+      "sneak": "epicfight:biped/living/hold_longsword",
+      "float": "epicfight:biped/living/hold_longsword",
+      "walk": "epicfight:biped/living/hold_longsword",
+      "swim": "epicfight:biped/living/hold_longsword",
+      "kneel": "epicfight:biped/living/hold_longsword"
+    }
+  },
+  "combos": {
+    "one_hand": [
+      "epicfight:biped/combat/sword_auto1",
+      "epicfight:biped/combat/sword_auto2",
+      "epicfight:biped/combat/sword_auto3",
+      "epicfight:biped/combat/sword_dash",
+      "epicfight:biped/combat/sword_airslash"
+    ]
+  },
+  "heavy_combos": {
+    "one_hand": [
+      "epicfight:biped/combat/greatsword_auto1",
+      "epicfight:biped/combat/greatsword_auto2",
+      "epicfight:biped/combat/greatsword_dash",
+      "epicfight:biped/combat/greatsword_dash"
+    ]
+  },
+  "swing_sound": "epicfight:entity.weapon.whoosh",
+  "styles": {
+    "default": "one_hand",
+    "cases": []
+  },
+  "category": "sword",
+  "usable_in_offhand": false
+}
