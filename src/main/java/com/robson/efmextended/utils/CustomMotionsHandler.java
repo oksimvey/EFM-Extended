@@ -8,10 +8,9 @@ import yesman.epicfight.skill.SkillDataManager;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 
-import java.util.Arrays;
 import java.util.List;
 
-public interface HeavyCombo {
+public interface CustomMotionsHandler {
 
     static void performHeavyAttack(Player player) {
         if (player != null) {
@@ -35,6 +34,16 @@ public interface HeavyCombo {
                 }
                 dataManager.setData(SkillDataKeys.COMBO_COUNTER.get(), comboCounter);
                 AnimUtils.playAnimation(player, heavyMotions.get(comboCounter));
+            }
+        }
+    }
+
+    static void performPushAttack(Player player) {
+        PlayerPatch<?> playerPatch = EpicFightCapabilities.getEntityPatch(player, PlayerPatch.class);
+        if (playerPatch != null && !playerPatch.getEntityState().attacking()) {
+            String pushmotion = ItemStackUtils.getPushMotion(player, player.getMainHandItem());
+            if (!pushmotion.isEmpty()) {
+                AnimUtils.playAnimation(player, pushmotion);
             }
         }
     }

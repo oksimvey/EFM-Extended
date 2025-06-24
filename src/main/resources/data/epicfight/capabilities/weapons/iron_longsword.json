@@ -1,4 +1,6 @@
 {
   "type": "epicfight:test",
-  "block_resistance": 5
+  "block_resistance": 5,
+  "dodges": 4,
+  "push_stamina": 25
 }

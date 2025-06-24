@@ -1,14 +1,8 @@
 package com.robson.efmextended.utils;
 
 import net.minecraft.world.entity.player.Player;
-import yesman.epicfight.gameasset.EpicFightSkills;
-import yesman.epicfight.skill.SkillDataKey;
-import yesman.epicfight.skill.SkillDataKeys;
-import yesman.epicfight.skill.SkillDataManager;
-import yesman.epicfight.world.capabilities.EpicFightCapabilities;
-import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
-
-import java.util.List;
+import yesman.epicfight.client.events.engine.ControllEngine;
+import yesman.epicfight.client.input.EpicFightKeyMappings;
 
 public abstract class CustomKey {
 
@@ -23,7 +17,6 @@ public abstract class CustomKey {
     public CustomKey(byte counterforstart) {
         this.counterforstart = counterforstart;
     }
-
 
     public void onPressTick(Player player) {
         if (!this.isPressed) {
@@ -54,7 +47,11 @@ public abstract class CustomKey {
 
         @Override
         public void onLongPress(Player player) {
-            HeavyCombo.performHeavyAttack(player);
+            if (ControllEngine.isKeyDown(EpicFightKeyMappings.GUARD)){
+                CustomMotionsHandler.performPushAttack(player);
+                return;
+            }
+            CustomMotionsHandler.performHeavyAttack(player);
         }
     };
 

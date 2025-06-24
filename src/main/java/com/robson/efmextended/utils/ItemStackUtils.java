@@ -60,6 +60,25 @@ public interface ItemStackUtils {
         return heavyMotions;
     }
 
+    static String getPushMotion(LivingEntity ent, ItemStack itemStack){
+        if (ent != null && itemStack != null) {
+            String type = getItemType(itemStack);
+            if (!type.isEmpty()) {
+                CompoundTag tags = WeaponTypeReloadListenerMixin.getCustomWeaponTypeTags().get(new ResourceLocation(type));
+                if (tags != null) {
+                    CompoundTag pushMotions = tags.getCompound("push_motions");
+                    if (pushMotions != null) {
+                        String style = getStyle(ent);
+                        if (!style.isEmpty()) {
+                            return pushMotions.getString(style);
+                        }
+                    }
+                }
+            }
+        }
+        return "";
+    }
+
     static String getStyle(LivingEntity ent){
         if (ent != null){
             LivingEntityPatch<?> patch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);

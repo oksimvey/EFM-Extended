@@ -10,6 +10,7 @@
   "client": [
   ],
   "mixins": [
+    "DodgeSkillMixin",
     "GuardSkillMixin",
     "ItemCapabilityReloadListenerMixin",
     "WeaponTypeReloadListenerMixin"
