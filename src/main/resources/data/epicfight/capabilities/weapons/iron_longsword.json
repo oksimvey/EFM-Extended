@@ -1,3 +1,4 @@
 {
-  "type": "epicfight:test"
+  "type": "epicfight:test",
+  "block_resistance": 5
 }

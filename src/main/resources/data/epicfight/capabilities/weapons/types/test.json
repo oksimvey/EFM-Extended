@@ -22,7 +22,8 @@
       "float": "epicfight:biped/living/hold_longsword",
       "walk": "epicfight:biped/living/hold_longsword",
       "swim": "epicfight:biped/living/hold_longsword",
-      "kneel": "epicfight:biped/living/hold_longsword"
+      "kneel": "epicfight:biped/living/hold_longsword",
+      "block": "epicfight:biped/skill/guard_longsword"
     }
   },
   "combos": {
@@ -41,6 +42,9 @@
       "epicfight:biped/combat/greatsword_dash",
       "epicfight:biped/combat/greatsword_dash"
     ]
+  },
+  "push_motions": {
+    "one_hand": ""
   },
   "swing_sound": "epicfight:entity.weapon.whoosh",
   "styles": {

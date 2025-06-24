@@ -10,6 +10,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
+import yesman.epicfight.world.capabilities.item.CapabilityItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,16 @@ public interface ItemStackUtils {
             }
         }
         return "";
+    }
+
+    static float getItemStaminaOnBlock(ItemStack itemStack){
+        if (itemStack != null){
+            CompoundTag tag = ItemCapabilityReloadListenerMixin.getCompounds().get(itemStack.getItem());
+            if (tag != null){
+                return tag.getFloat("block_resistance");
+            }
+        }
+        return 0;
     }
 
     static List<String> getHeavyMotion(LivingEntity ent, ItemStack itemStack){

@@ -27,6 +27,7 @@ public abstract class CustomKey {
 
     public void onPressTick(Player player) {
         if (!this.isPressed) {
+            this.presscounter = 0;
             this.isPressed = true;
         }
         if (this.isPressed() && !longPressTriggered) {
