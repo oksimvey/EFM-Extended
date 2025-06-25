@@ -60,6 +60,36 @@ public interface ItemStackUtils {
         return heavyMotions;
     }
 
+    static float getPushConsumption(ItemStack itemStack){
+        if (itemStack != null){
+            CompoundTag tag = ItemCapabilityReloadListenerMixin.getCompounds().get(itemStack.getItem());
+            if (tag != null){
+                return tag.getFloat("push_stamina");
+            }
+        }
+        return 0;
+    }
+
+    static float getPushImpact(ItemStack itemStack){
+        if (itemStack != null){
+            CompoundTag tag = ItemCapabilityReloadListenerMixin.getCompounds().get(itemStack.getItem());
+            if (tag != null){
+                return tag.getFloat("push_impact");
+            }
+        }
+        return 0;
+    }
+
+    static int getMaxDodges(ItemStack itemStack){
+        if (itemStack != null){
+            CompoundTag tag = ItemCapabilityReloadListenerMixin.getCompounds().get(itemStack.getItem());
+            if (tag != null){
+                return tag.getInt("max_dodges");
+            }
+        }
+        return 0;
+    }
+
     static String getPushMotion(LivingEntity ent, ItemStack itemStack){
         if (ent != null && itemStack != null) {
             String type = getItemType(itemStack);

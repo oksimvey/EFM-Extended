@@ -4,7 +4,7 @@ import net.minecraft.world.entity.player.Player;
 import yesman.epicfight.client.events.engine.ControllEngine;
 import yesman.epicfight.client.input.EpicFightKeyMappings;
 
-public abstract class CustomKey {
+public class CustomKey {
 
     private boolean isPressed = false;
 
@@ -22,6 +22,10 @@ public abstract class CustomKey {
         if (!this.isPressed) {
             this.presscounter = 0;
             this.isPressed = true;
+            if (ControllEngine.isKeyDown(EpicFightKeyMappings.GUARD)){
+                CustomMotionsHandler.performPushAttack(player);
+                return;
+            }
         }
         if (this.isPressed() && !longPressTriggered) {
             this.presscounter++;
@@ -32,7 +36,9 @@ public abstract class CustomKey {
         }
     }
 
-    public abstract void onLongPress(Player player);
+    public void onLongPress(Player player){
+        CustomMotionsHandler.performHeavyAttack(player);
+    }
 
     public boolean isPressed() {
         return this.isPressed;
@@ -43,16 +49,4 @@ public abstract class CustomKey {
         this.presscounter = 0;
         this.longPressTriggered = false;
     }
-    public static CustomKey HEAVY_ATTACK_KEY = new CustomKey((byte) 10) {
-
-        @Override
-        public void onLongPress(Player player) {
-            if (ControllEngine.isKeyDown(EpicFightKeyMappings.GUARD)){
-                CustomMotionsHandler.performPushAttack(player);
-                return;
-            }
-            CustomMotionsHandler.performHeavyAttack(player);
-        }
-    };
-
 }

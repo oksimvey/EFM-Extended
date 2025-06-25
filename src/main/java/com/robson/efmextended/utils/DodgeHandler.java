@@ -10,13 +10,21 @@ public class DodgeHandler {
 
     private int current_dodges;
 
+    public DodgeHandler(){
+        this.current_dodges = 0;
+        this.cooldowncounter = 0;
+        this.current_max_dodges = 0;
+    }
+
     public void tick(Player player){
         this.cooldowncounter++;
-        this.current_max_dodges = getMaxDodges(player);
-        if (this.current_dodges <= this.current_max_dodges){
+        this.current_max_dodges = ItemStackUtils.getMaxDodges(player.getMainHandItem());
+        if (this.current_dodges >= this.current_max_dodges){
+            this.cooldowncounter = 0;
+            this.current_dodges = this.current_max_dodges;
             return;
         }
-        if (this.cooldowncounter >= 10){
+        if (this.cooldowncounter >= 100){
             this.cooldowncounter = 0;
             this.current_dodges++;
         }
@@ -27,12 +35,15 @@ public class DodgeHandler {
     }
 
     public void consume(){
-        this.current_dodges--;
+        this.current_dodges -= 1;
     }
 
-    public static int getMaxDodges(Player player){
-        return 0;
+    public int getDodges(){
+        return this.current_dodges;
     }
 
 
+    public int getMaxDodges(){
+        return this.current_max_dodges;
+    }
 }

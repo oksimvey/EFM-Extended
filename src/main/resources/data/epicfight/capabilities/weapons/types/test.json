@@ -46,7 +46,6 @@
   "push_motions": {
     "one_hand": "efm_extended:biped/skill/push"
   },
-  "push_impact": 2,
   "swing_sound": "epicfight:entity.weapon.whoosh",
   "styles": {
     "default": "one_hand",
