@@ -1,7 +1,6 @@
 package com.robson.efmextended.events;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.robson.efmextended.utils.ClientDataHandler;
 import com.robson.efmextended.utils.ItemStackUtils;
 import net.minecraft.client.Minecraft;
@@ -11,14 +10,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import yesman.epicfight.gameasset.EpicFightSkills;
-import yesman.epicfight.skill.SkillSlot;
 import yesman.epicfight.skill.SkillSlots;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
@@ -35,14 +31,15 @@ public class ClientEvents {
                 ClientDataHandler handler = ClientDataHandler.MANAGER.get(Minecraft.getInstance().player);
                 if (handler.getMaxDodges() != 0) {
                     for (int i = 0; i < handler.getMaxDodges(); i++) {
-                        float color = handler.getDodges() >= i ? 1 : 0.5f;
+                        float color = handler.getDodges() >= i + 1 ? 1 : 0.5f;
                         GuiGraphics guiGraphics = event.getGuiGraphics();
                         Minecraft mc = Minecraft.getInstance();
                         int screenWidth = mc.getWindow().getGuiScaledWidth() / 2;
                         int screenHeight = mc.getWindow().getGuiScaledHeight();
-                        int iconSize = 10;
-                        int x = screenWidth + 10 + (i * iconSize);
-                        int y = screenHeight - iconSize - 40;
+                        int iconSize = 12;
+                        int height = ppatch.getOriginal().isCreative() ? 25 : 40;
+                        int x = screenWidth + 8 + (i * iconSize);
+                        int y = screenHeight - iconSize - height;
                         RenderSystem.enableBlend();
                         RenderSystem.setShader(GameRenderer::getPositionTexShader);
                         RenderSystem.setShaderTexture(0, locatiion);
