@@ -38,15 +38,20 @@ public class ClientEvents {
             ItemStack stack = event.getItemStack();
             float stamina = ItemStackUtils.getItemStaminaOnBlock(stack);
             if (stamina > 0){
-                event.getToolTip().add( Component.literal(" " + stamina + " Block Resistance").withStyle(ChatFormatting.DARK_GREEN));
+                event.getToolTip().add( Component.literal(" " + stamina + " Block Resistance"));
+            }
+
+            float push_impact = ItemStackUtils.getPushImpact(stack);
+            if (push_impact > 0){
+                event.getToolTip().add( Component.literal(" " + push_impact + " Push Impact"));
             }
             float pushstamina = ItemStackUtils.getPushConsumption(stack);
             if (pushstamina > 0){
-                event.getToolTip().add(Component.literal(" " + pushstamina + " Push Stamina").withStyle(ChatFormatting.DARK_GREEN));
+                event.getToolTip().add(Component.literal(" " + pushstamina + "% Stamina Consumption On Push"));
             }
             int dodges = ItemStackUtils.getMaxDodges(stack);
             if (dodges > 0){
-                event.getToolTip().add( Component.literal(" " + dodges + " Max Dodges").withStyle(ChatFormatting.DARK_GREEN));
+                event.getToolTip().add( Component.literal(" " + dodges + " Max Dodges"));
             }
         }
     }
