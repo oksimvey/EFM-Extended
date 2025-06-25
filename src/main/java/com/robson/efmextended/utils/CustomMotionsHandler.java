@@ -26,6 +26,9 @@ public interface CustomMotionsHandler {
             PlayerPatch<?> playerPatch = EpicFightCapabilities.getEntityPatch(player, PlayerPatch.class);
             if (playerPatch != null && !playerPatch.getEntityState().attacking()) {
                 List<String> heavyMotions = ItemStackUtils.getHeavyMotion(player, player.getMainHandItem());
+                if (heavyMotions.isEmpty()) {
+                    return;
+                }
                 if (player.isSprinting()) {
                     AnimUtils.playAnimation(player, heavyMotions.get(heavyMotions.size() - 2));
                     return;
@@ -34,7 +37,6 @@ public interface CustomMotionsHandler {
                     AnimUtils.playAnimation(player, heavyMotions.get(heavyMotions.size() - 1));
                     return;
                 }
-
                 SkillDataManager dataManager = playerPatch.getSkill(EpicFightSkills.BASIC_ATTACK).getDataManager();
                 int comboCounter = (Integer) dataManager.getDataValue((SkillDataKey) SkillDataKeys.COMBO_COUNTER.get());
                 ++comboCounter;

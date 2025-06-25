@@ -1,33 +1,63 @@
 package com.robson.efmextended.events;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.robson.efmextended.utils.ClientDataHandler;
 import com.robson.efmextended.utils.ItemStackUtils;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import yesman.epicfight.gameasset.EpicFightSkills;
+import yesman.epicfight.skill.SkillSlot;
+import yesman.epicfight.skill.SkillSlots;
+import yesman.epicfight.world.capabilities.EpicFightCapabilities;
+import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 
 @Mod.EventBusSubscriber
 public class ClientEvents {
 
     @SubscribeEvent
-    public static void renderOverlay(RenderGuiOverlayEvent event){
-        if (Minecraft.getInstance().player != null && ClientDataHandler.MANAGER.get(Minecraft.getInstance().player) != null){
-            ClientDataHandler handler = ClientDataHandler.MANAGER.get(Minecraft.getInstance().player);
-            event.getGuiGraphics().drawString(Minecraft.getInstance().font, handler.getDodges() + "/" + handler.getMaxDodges(), 55, 20, 0xFFFFFF);
+    public static void renderOverlay(RenderGuiOverlayEvent event) {
+        if (Minecraft.getInstance().player != null && ClientDataHandler.MANAGER.get(Minecraft.getInstance().player) != null) {
+            PlayerPatch<Player> ppatch = EpicFightCapabilities.getEntityPatch(Minecraft.getInstance().player, PlayerPatch.class);
+            if (ppatch != null && ppatch.getSkill(SkillSlots.DODGE) != null) {
+                ResourceLocation locatiion = ppatch.getSkill(SkillSlots.DODGE).getSkill().getSkillTexture();
+                ClientDataHandler handler = ClientDataHandler.MANAGER.get(Minecraft.getInstance().player);
+                if (handler.getMaxDodges() != 0) {
+                    for (int i = 0; i < handler.getMaxDodges(); i++) {
+                        float color = handler.getDodges() >= i ? 1 : 0.5f;
+                        GuiGraphics guiGraphics = event.getGuiGraphics();
+                        Minecraft mc = Minecraft.getInstance();
+                        int screenWidth = mc.getWindow().getGuiScaledWidth() / 2;
+                        int screenHeight = mc.getWindow().getGuiScaledHeight();
+                        int iconSize = 10;
+                        int x = screenWidth + 10 + (i * iconSize);
+                        int y = screenHeight - iconSize - 40;
+                        RenderSystem.enableBlend();
+                        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+                        RenderSystem.setShaderTexture(0, locatiion);
+                        RenderSystem.setShaderColor(color, color, color, 1.0F);
+                        guiGraphics.blit(locatiion, x, y, 0, 0, iconSize, iconSize, iconSize, iconSize);
+                        RenderSystem.disableBlend();
+                    }
+                }
+            }
         }
     }
 
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event){
-        if (Minecraft.getInstance().player != null && ClientDataHandler.MANAGER.get(Minecraft.getInstance().player) != null){
+        if (Minecraft.getInstance().player != null && ClientDataHandler.MANAGER.get(Minecraft.getInstance().player) != null && !Minecraft.getInstance().isPaused()){
             ClientDataHandler.MANAGER.get(Minecraft.getInstance().player).tick(Minecraft.getInstance().player);
         }
     }
