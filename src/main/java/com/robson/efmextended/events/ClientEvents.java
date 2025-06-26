@@ -23,7 +23,7 @@ import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 public class ClientEvents {
 
     @SubscribeEvent
-    public static void renderOverlay(RenderGuiOverlayEvent event) {
+    public static void renderOverlay(RenderGuiOverlayEvent.Post event) {
         if (Minecraft.getInstance().player != null && ClientDataHandler.MANAGER.get(Minecraft.getInstance().player) != null) {
             PlayerPatch<Player> ppatch = EpicFightCapabilities.getEntityPatch(Minecraft.getInstance().player, PlayerPatch.class);
             if (ppatch != null && ppatch.getSkill(SkillSlots.DODGE) != null) {
