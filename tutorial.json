@@ -1,0 +1,74 @@
+//THAT IS ONLY A TUTORIAL OF THE MOD
+//THAT IS A TUTORIAL FILE, IF U WANT TO SEE A FULL USEABLE DATAPACK SEE THE "data" DIRECTORY OF THIS MOD
+//TO START UNDERSTANDING THIS MOD, FIRST GO TO https://epicfight-docs.readthedocs.io/Guides/Weapons/page1/ AS THIS MOD IS AN ADDON FOR IT
+
+//WEAPON TYPE CHANGES
+//NOW IN THE WEAPON TYPE .JSON FILE, U CAN SET UP NEW PARAMETERS, HERE IS A EXAMPLE BELLOW WITH DESCRIPTIONS ON NEW PARAMETERS
+
+{
+  "collider": {
+    "number": 3,
+    "size": [
+      0.4,
+      0.4,
+      0.8
+    ],
+    "center": [
+      0.0,
+      0.0,
+      -0.75
+    ]
+  },
+  "hit_particle": "epicfight:cut",
+  "hit_sound": "epicfight:entity.hit.blade",
+  "livingmotion_modifier": {
+    "one_hand": {
+      "idle": "epicfight:biped/living/hold_longsword",
+      "run": "epicfight:biped/living/hold_longsword",
+      "sneak": "epicfight:biped/living/hold_longsword",
+      "float": "epicfight:biped/living/hold_longsword",
+      "walk": "epicfight:biped/living/hold_longsword",
+      "swim": "epicfight:biped/living/hold_longsword",
+      "kneel": "epicfight:biped/living/hold_longsword",
+      "block": "epicfight:biped/skill/guard_longsword"
+    }
+  },
+  "combos": {
+    "one_hand": [
+      "epicfight:biped/combat/sword_auto1",
+      "epicfight:biped/combat/sword_auto2",
+      "epicfight:biped/combat/sword_auto3",
+      "epicfight:biped/combat/sword_dash",
+      "epicfight:biped/combat/sword_airslash"
+    ]
+  },
+  "heavy_combos": { //HEAVY MOTIONS ARE THE ANIMATIONS PLAYED WHEN U HOLD CLICK
+    "one_hand": [ //THAT IS THE STYLE U NEED TO BE IN TO ACTIVE THESE SPECIFIC MOTIONS
+      "epicfight:biped/combat/greatsword_auto1", //HERE U SHOULD PUT THE ANIMATIONS RESPECTIVES ID'S
+      "epicfight:biped/combat/greatsword_auto2",//THE FIRST MOTIONS ARE THE AUTOS OF NORMAL HOLD CLICKING
+      "epicfight:biped/combat/greatsword_dash", //THE PENULTIMATE MOTION IS THE DASH MOTION
+      "epicfight:biped/combat/greatsword_dash" //THE LAST MOTION IS THE AIRSLASH MOTION
+    ]
+  },
+  "push_motions": { //THAT ARE THE MOTIONS OF THE PUSH SKILL, TRIGGERED WHEN U CLICK WHEN HOLDING BLOCK
+    "one_hand": "efm_extended:biped/skill/push" //HERE U SHOULD VINCULATE THE SPECIFIC MOTION PER STYLE, AS YOU WE SAW ABOVE
+  },
+  "swing_sound": "epicfight:entity.weapon.whoosh",
+  "styles": {
+    "default": "one_hand",
+    "cases": []
+  },
+  "category": "sword",
+  "usable_in_offhand": false
+}
+
+//WEAPON CAPABILITY CHANGES
+//NOW U CAN ALSO SET NEW PARAMETERS ON THE WEAPON CAPABILITY .JSON FILE, SEE THE EXAMPLE BELOW
+
+{
+  "type": "epicfight:test", //THAT IS THE TYPE OF THE WEAPON
+  "block_resistance": 5, //THAT IS THE BLOCK RESISTANCE OF THE WEAPON, IT DETERMINES HOW MANY STAMINA IT WILL CONSUME WHEN BLOCKING
+  "max_dodges": 4, //THAT VALUE DETERMINES THE MAX DODGES THE WEAPON HAS
+  "push_stamina": 25, //THAT VALUE DETERMINES THE STAMINA % CONSUMPTION WHEN USING THE PUSH SKILL
+  "push_impact": 10 //THAT VALUE DETERMINES THE IMPACT OF THE PUSH SKILL, HIGHER VALUES MEANS MORE KNOCKBACK AND STUN TO ENTITIES
+}
