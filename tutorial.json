@@ -51,7 +51,7 @@
     ]
   },
   "push_motions": { //THAT ARE THE MOTIONS OF THE PUSH SKILL, TRIGGERED WHEN U CLICK WHEN HOLDING BLOCK
-    "one_hand": "efm_extended:biped/skill/push" //HERE U SHOULD VINCULATE THE SPECIFIC MOTION PER STYLE, AS YOU WE SAW ABOVE
+    "one_hand": "efm_extended:biped/skill/push" //HERE U SHOULD VINCULATE THE SPECIFIC MOTION PER STYLE, AS WE SAW ABOVE
   },
   "swing_sound": "epicfight:entity.weapon.whoosh",
   "styles": {
