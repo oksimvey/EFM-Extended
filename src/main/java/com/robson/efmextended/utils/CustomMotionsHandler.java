@@ -6,9 +6,8 @@ import net.minecraft.world.entity.player.Player;
 import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.gameasset.EpicFightSkills;
-import yesman.epicfight.skill.SkillDataKey;
-import yesman.epicfight.skill.SkillDataKeys;
-import yesman.epicfight.skill.SkillDataManager;
+import yesman.epicfight.skill.*;
+import yesman.epicfight.skill.guard.GuardSkill;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 
@@ -51,7 +50,7 @@ public interface CustomMotionsHandler {
 
     static void performPushAttack(Player player) {
         PlayerPatch<?> playerPatch = EpicFightCapabilities.getEntityPatch(player, PlayerPatch.class);
-        if (playerPatch != null && !playerPatch.getEntityState().attacking() && playerPatch.getEntityState().canBasicAttack()) {
+        if (playerPatch != null && playerPatch.getSkill(SkillSlots.GUARD).getSkill() instanceof GuardSkill && !playerPatch.getEntityState().attacking() && playerPatch.getEntityState().canBasicAttack()) {
             float staminatoconsume = playerPatch.getMaxStamina() * (ItemStackUtils.getPushConsumption(player.getMainHandItem()) / 100f);
             float currentstamina = playerPatch.getStamina();
             if (currentstamina >= staminatoconsume) {
