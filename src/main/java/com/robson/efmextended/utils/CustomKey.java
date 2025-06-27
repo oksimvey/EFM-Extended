@@ -18,6 +18,10 @@ public class CustomKey {
         this.counterforstart = counterforstart;
     }
 
+    public byte getPresscounter() {
+        return this.presscounter;
+    }
+
     public void onPressTick(Player player) {
         if (!this.isPressed) {
             this.presscounter = 0;

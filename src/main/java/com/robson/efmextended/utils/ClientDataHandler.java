@@ -19,6 +19,10 @@ public class ClientDataHandler {
         this.handler = handler;
     }
 
+    public CustomKey getKey(){
+        return this.key;
+    }
+
     public void tick(Player player){
         this.handler.tick(player);
         if (ControllEngine.isKeyDown(EpicFightKeyMappings.ATTACK)){

@@ -7,9 +7,8 @@
     "defaultRequire": 1
   },
   "refmap": "mixins.efmextended.refmap.json",
-  "client": [
-  ],
   "mixins": [
+    "BasicAttackMixin",
     "DodgeSkillMixin",
     "GuardSkillMixin",
     "ItemCapabilityReloadListenerMixin",
