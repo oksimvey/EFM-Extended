@@ -2,6 +2,7 @@
   "type": "epicfight:test",
   "block_resistance": 5,
   "max_dodges": 4,
+  "dodge_cooldown":60,
   "push_stamina": 25,
   "push_impact": 10
 }

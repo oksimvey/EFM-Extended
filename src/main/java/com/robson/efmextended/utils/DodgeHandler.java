@@ -12,14 +12,22 @@ public class DodgeHandler {
 
     private byte counterforstart;
 
+    private byte cooldowntimer;
+
     public DodgeHandler(){
         this.current_dodges = 0;
         this.cooldowncounter = 0;
         this.current_max_dodges = 0;
         this.counterforstart = 0;
+        this.cooldowntimer = 60;
     }
 
     public void tick(Player player){
+        int timer = ItemStackUtils.getDodgeCooldown(player.getMainHandItem());
+        if (timer > 0){
+            this.cooldowntimer = (byte) timer;
+        }
+        else this.cooldowntimer = 60;
         this.current_max_dodges = (byte) ItemStackUtils.getMaxDodges(player.getMainHandItem());
         if (this.counterforstart < 60){
             this.counterforstart++;
@@ -32,7 +40,7 @@ public class DodgeHandler {
             this.counterforstart = 0;
             return;
         }
-        if (this.current_max_dodges >= 1 && this.cooldowncounter >= 100){
+        if (this.current_max_dodges >= 1 && this.cooldowncounter >= cooldowntimer){
             this.cooldowncounter = 0;
             this.current_dodges++;
         }

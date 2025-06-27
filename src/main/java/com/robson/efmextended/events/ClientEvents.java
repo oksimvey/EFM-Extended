@@ -83,6 +83,10 @@ public class ClientEvents {
             if (dodges > 0){
                 event.getToolTip().add( Component.literal(" " + dodges + " Max Dodges"));
             }
+            int dodgecooldown = ItemStackUtils.getDodgeCooldown(stack);
+            if (dodgecooldown > 0){
+                event.getToolTip().add( Component.literal(" " + (float) dodgecooldown / 20 + "s Dodge Cooldown"));
+            }
         }
     }
 }

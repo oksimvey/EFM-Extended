@@ -90,6 +90,16 @@ public interface ItemStackUtils {
         return 0;
     }
 
+    static int getDodgeCooldown(ItemStack itemStack){
+        if (itemStack != null){
+            CompoundTag tag = ItemCapabilityReloadListenerMixin.getCompounds().get(itemStack.getItem());
+            if (tag != null){
+                return tag.getInt("dodge_cooldown");
+            }
+        }
+        return 0;
+    }
+
     static String getPushMotion(LivingEntity ent, ItemStack itemStack){
         if (ent != null && itemStack != null) {
             String type = getItemType(itemStack);
