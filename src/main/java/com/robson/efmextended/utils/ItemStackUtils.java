@@ -27,6 +27,26 @@ public interface ItemStackUtils {
         return "";
     }
 
+    static float getCriticalMultiplier(ItemStack itemStack){
+        if (itemStack != null){
+            CompoundTag tag = ItemCapabilityReloadListenerMixin.getCompounds().get(itemStack.getItem());
+            if (tag != null){
+                return tag.getFloat("critical_multiplier");
+            }
+        }
+        return 0;
+    }
+
+    static float getCriticalChance(ItemStack itemStack){
+        if (itemStack != null){
+            CompoundTag tag = ItemCapabilityReloadListenerMixin.getCompounds().get(itemStack.getItem());
+            if (tag != null){
+                return tag.getFloat("critical_chance");
+            }
+        }
+        return 0;
+    }
+
     static float getItemStaminaOnBlock(ItemStack itemStack){
         if (itemStack != null){
             CompoundTag tag = ItemCapabilityReloadListenerMixin.getCompounds().get(itemStack.getItem());

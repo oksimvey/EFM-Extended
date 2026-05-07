@@ -59,6 +59,8 @@ public class ClientEvents {
     public static void onClientTick(TickEvent.ClientTickEvent event){
         if (Minecraft.getInstance().player != null && ClientDataHandler.MANAGER.get(Minecraft.getInstance().player) != null && !Minecraft.getInstance().isPaused()){
             ClientDataHandler.MANAGER.get(Minecraft.getInstance().player).tick(Minecraft.getInstance().player);
+
+
         }
     }
 
@@ -66,7 +68,16 @@ public class ClientEvents {
     public static void renderToolTips(ItemTooltipEvent event){
         if (event != null){
             ItemStack stack = event.getItemStack();
+            float critical_chance = ItemStackUtils.getCriticalChance(stack);
+            if (critical_chance > 0){
+                event.getToolTip().add( Component.literal(" " + critical_chance + "% Critical Hit Chance"));
+            }
+            float critical_multiplier = ItemStackUtils.getCriticalMultiplier(stack);
+            if (critical_multiplier > 0){
+                event.getToolTip().add( Component.literal(" " + critical_multiplier + "x Critical Hit Multiplier"));
+            }
             float stamina = ItemStackUtils.getItemStaminaOnBlock(stack);
+
             if (stamina > 0){
                 event.getToolTip().add( Component.literal(" " + stamina + " Block Resistance"));
             }

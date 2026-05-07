@@ -13,7 +13,7 @@ public class PlayerSetup {
     @SubscribeEvent
     public static void onPlayerSetup(PlayerEvent.PlayerLoggedInEvent event){
         if (event.getEntity() != null){
-            ClientDataHandler.MANAGER.put(event.getEntity(), new ClientDataHandler(new CustomKey((byte) 10), new DodgeHandler()));
+            ClientDataHandler.MANAGER.put(event.getEntity(), new ClientDataHandler(new CustomKey((byte) 12), new DodgeHandler()));
         }
     }
 

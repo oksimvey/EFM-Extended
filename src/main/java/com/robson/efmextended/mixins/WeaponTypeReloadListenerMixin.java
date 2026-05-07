@@ -11,7 +11,6 @@ import java.util.Map;
 @Mixin(WeaponTypeReloadListener.class)
 public interface WeaponTypeReloadListenerMixin {
 
-
     @Accessor("CAPABILITY_COMPOUNDS")
     static Map<ResourceLocation, CompoundTag> getCustomWeaponTypeTags(){
         throw new RuntimeException();

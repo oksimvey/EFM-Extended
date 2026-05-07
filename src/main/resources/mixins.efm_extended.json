@@ -8,11 +8,19 @@
   },
   "refmap": "mixins.efmextended.refmap.json",
   "mixins": [
+    "AttackAnimationMixin",
     "BasicAttackMixin",
     "DodgeSkillMixin",
     "GuardSkillMixin",
     "ItemCapabilityReloadListenerMixin",
     "PlayerPatchMixin",
     "WeaponTypeReloadListenerMixin"
+  ],
+  "client": [
+    "AnimationTrailMixin",
+    "ItemRendererMixin",
+    "RenderBufferInterface",
+    "RenderBuffersMixin",
+    "TrailInfoAccessorMixin"
   ]
 }
