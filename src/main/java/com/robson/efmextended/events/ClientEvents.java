@@ -26,11 +26,11 @@ public class ClientEvents {
     @SubscribeEvent
     public static void renderOverlay(RenderGuiOverlayEvent event) {
         if (event.getOverlay().id().equals(VanillaGuiOverlay.HOTBAR.id())) {
-            if (Minecraft.getInstance().player != null && ClientDataHandler.MANAGER.get(Minecraft.getInstance().player) != null) {
+            if (Minecraft.getInstance().player != null && ClientDataHandler.CLIENT_DATA_MANAGER.get(Minecraft.getInstance().player) != null) {
                 PlayerPatch<Player> ppatch = EpicFightCapabilities.getEntityPatch(Minecraft.getInstance().player, PlayerPatch.class);
                 if (ppatch != null && ppatch.getSkill(SkillSlots.DODGE).getSkill() != null) {
                     ResourceLocation locatiion = ppatch.getSkill(SkillSlots.DODGE).getSkill().getSkillTexture();
-                    ClientDataHandler handler = ClientDataHandler.MANAGER.get(Minecraft.getInstance().player);
+                    ClientDataHandler handler = ClientDataHandler.CLIENT_DATA_MANAGER.get(Minecraft.getInstance().player);
                     if (handler.getMaxDodges() != 0) {
                         for (int i = 0; i < handler.getMaxDodges(); i++) {
                             float color = handler.getDodges() >= i + 1 ? 1 : 0.5f;
@@ -57,10 +57,8 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event){
-        if (Minecraft.getInstance().player != null && ClientDataHandler.MANAGER.get(Minecraft.getInstance().player) != null && !Minecraft.getInstance().isPaused()){
-            ClientDataHandler.MANAGER.get(Minecraft.getInstance().player).tick(Minecraft.getInstance().player);
-
-
+        if (Minecraft.getInstance().player != null && ClientDataHandler.CLIENT_DATA_MANAGER.get(Minecraft.getInstance().player) != null && !Minecraft.getInstance().isPaused()){
+           ClientDataHandler.CLIENT_DATA_MANAGER.get(Minecraft.getInstance().player).tick(Minecraft.getInstance().player);
         }
     }
 
@@ -76,6 +74,11 @@ public class ClientEvents {
             if (critical_multiplier > 0){
                 event.getToolTip().add( Component.literal(" " + critical_multiplier + "x Critical Hit Multiplier"));
             }
+            float heavy_multiplier = ItemStackUtils.getHeavyMultiplier(stack);
+            if (heavy_multiplier > 0){
+                event.getToolTip().add( Component.literal(" " + heavy_multiplier + "x Heavy Hit Multiplier"));
+            }
+
             float stamina = ItemStackUtils.getItemStaminaOnBlock(stack);
 
             if (stamina > 0){

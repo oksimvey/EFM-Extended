@@ -24,7 +24,7 @@ public abstract class DodgeSkillMixin extends Skill {
     @Overwrite(remap = false)
     public boolean isExecutableState(PlayerPatch<?> executer) {
         EntityState playerState = executer.getEntityState();
-        ClientDataHandler handler = ClientDataHandler.MANAGER.get(executer.getOriginal());
+        ClientDataHandler handler = ClientDataHandler.CLIENT_DATA_MANAGER.get(executer.getOriginal());
         boolean canexecute =  !executer.isInAir() && playerState.canUseSkill() && !((Player)executer.getOriginal()).isInWater() &&
                 !((Player)executer.getOriginal()).onClimbable() && ((Player)executer.getOriginal()).getVehicle() == null && handler != null && handler.canDodge();
                 if (canexecute && !executer.getOriginal().level().isClientSide) {

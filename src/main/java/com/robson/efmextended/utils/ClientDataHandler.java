@@ -3,7 +3,6 @@ package com.robson.efmextended.utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.player.Player;
-import yesman.epicfight.client.ClientEngine;
 import yesman.epicfight.client.events.engine.ControlEngine;
 import yesman.epicfight.client.input.EpicFightKeyMappings;
 
@@ -11,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ClientDataHandler {
 
-    public static ConcurrentHashMap<Player, ClientDataHandler> MANAGER = new ConcurrentHashMap<>();
+    public static ConcurrentHashMap<Player, ClientDataHandler> CLIENT_DATA_MANAGER = new ConcurrentHashMap<>();
 
     private final CustomKey key;
 
@@ -38,6 +37,7 @@ public class ClientDataHandler {
         }
         this.key.onRelease(player);
     }
+
 
     public void consume(){
         this.handler.consume();

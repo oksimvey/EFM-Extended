@@ -1,28 +1,18 @@
 package com.robson.efmextended.mixins;
 
-import com.robson.efmextended.utils.CustomKey;
 import com.robson.efmextended.utils.CustomMotionsHandler;
 import com.robson.efmextended.utils.ItemStackUtils;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 
 @Mixin(PlayerPatch.class)
 public abstract class PlayerPatchMixin extends LivingEntityPatch {
 
-    @Inject(method = "getAttackSpeed", at = @At("RETURN"), cancellable = true, remap = false)
-    public void getAttackSpeed(InteractionHand hand, CallbackInfoReturnable<Float> cir) {
-        if (CustomKey.players.contains(this.getOriginal())) {
-            cir.cancel();
-            cir.setReturnValue(0.5F * cir.getReturnValue());
-        }
-    }
 
     @Redirect(method = "getDamageSource", at = @At(value = "INVOKE", target = "Lyesman/epicfight/world/capabilities/entitypatch/player/PlayerPatch;getImpact(Lnet/minecraft/world/InteractionHand;)F"), remap = false)
     public float getImpact(PlayerPatch<Player> instance, InteractionHand interactionHand) {

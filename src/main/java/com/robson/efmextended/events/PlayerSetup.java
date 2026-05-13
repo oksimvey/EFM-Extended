@@ -13,14 +13,14 @@ public class PlayerSetup {
     @SubscribeEvent
     public static void onPlayerSetup(PlayerEvent.PlayerLoggedInEvent event){
         if (event.getEntity() != null){
-            ClientDataHandler.MANAGER.put(event.getEntity(), new ClientDataHandler(new CustomKey((byte) 12), new DodgeHandler()));
+            ClientDataHandler.CLIENT_DATA_MANAGER.put(event.getEntity(), new ClientDataHandler(new CustomKey((byte) 12), new DodgeHandler()));
         }
     }
 
     @SubscribeEvent
     public static void onPlayerLeave(PlayerEvent.PlayerLoggedOutEvent event){
         if (event.getEntity() != null){
-            ClientDataHandler.MANAGER.remove(event.getEntity());
+            ClientDataHandler.CLIENT_DATA_MANAGER.remove(event.getEntity());
         }
     }
 }

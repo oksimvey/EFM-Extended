@@ -12,12 +12,16 @@ import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public interface CustomMotionsHandler {
 
     List<LivingEntity> pushingEntities = new ArrayList<>();
+
+    ConcurrentHashMap<UUID, Byte> ACTIVE_HEAVY = new ConcurrentHashMap<>();
 
     static void performHeavyAttack(Player player) {
         if (player != null) {

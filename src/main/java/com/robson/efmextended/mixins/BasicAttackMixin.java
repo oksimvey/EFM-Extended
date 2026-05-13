@@ -25,7 +25,7 @@ public class BasicAttackMixin extends Skill {
     public boolean isExecutableState(PlayerPatch<?> executor){
         EntityState playerState = executor.getEntityState();
         Player player = executor.getOriginal();
-        byte input = ClientDataHandler.MANAGER.get(executor.getOriginal()).getKey().getPressCounter();
+        byte input = ClientDataHandler.CLIENT_DATA_MANAGER.get(executor.getOriginal()).getKey().getPressCounter();
         return !player.isSpectator() && !executor.isInAir() && playerState.canBasicAttack() && input == 0;
     }
 

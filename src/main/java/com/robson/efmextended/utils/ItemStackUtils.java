@@ -37,6 +37,16 @@ public interface ItemStackUtils {
         return 0;
     }
 
+    static float getHeavyMultiplier(ItemStack stack){
+        if (stack != null){
+            CompoundTag tag = ItemCapabilityReloadListenerMixin.getCompounds().get(stack.getItem());
+            if (tag != null){
+                return tag.getFloat("heavy_multiplier");
+            }
+        }
+        return 0;
+    }
+
     static float getCriticalChance(ItemStack itemStack){
         if (itemStack != null){
             CompoundTag tag = ItemCapabilityReloadListenerMixin.getCompounds().get(itemStack.getItem());

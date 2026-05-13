@@ -3,14 +3,10 @@ package com.robson.efmextended.utils;
 import net.minecraft.world.entity.player.Player;
 import yesman.epicfight.client.input.EpicFightKeyMappings;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import static com.robson.efmextended.utils.CustomMotionsHandler.ACTIVE_HEAVY;
 import static yesman.epicfight.client.events.engine.ControlEngine.isKeyDown;
 
 public class CustomKey {
-
-    public static List<Player> players = new ArrayList<>();
 
     private boolean isPressed = false;
 
@@ -33,10 +29,17 @@ public class CustomKey {
             this.presscounter = 0;
             this.isPressed = true;
             if (isKeyDown(EpicFightKeyMappings.GUARD)){
-                CustomMotionsHandler.performPushAttack(player);
-                return;
+
+                    CustomMotionsHandler.performPushAttack(player);
+                    return;
+
             }
         }
+
+        if (longPressTriggered && ACTIVE_HEAVY.containsKey(player.getUUID())  && player.level().isClientSide){
+            ACTIVE_HEAVY.put(player.getUUID(), (byte)Math.min (ACTIVE_HEAVY.get(player.getUUID()) + 1, 60));
+        }
+
         if (this.isPressed() && !longPressTriggered) {
 
             this.presscounter++;
@@ -44,8 +47,12 @@ public class CustomKey {
             if (this.presscounter >= this.counterforstart) {
                 this.presscounter = 0;
                 this.isPressed = false;
+
                 CustomMotionsHandler.performHeavyAttack(player);
+
                 this.longPressTriggered = true;
+                ACTIVE_HEAVY.put(player.getUUID(), (byte) 1);
+
             }
         }
     }
@@ -55,9 +62,9 @@ public class CustomKey {
     }
 
     public void onRelease(Player player) {
-
         this.isPressed = false;
         this.presscounter = 0;
         this.longPressTriggered = false;
+        ACTIVE_HEAVY.remove(player.getUUID());
     }
 }

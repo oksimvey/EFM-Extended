@@ -21,16 +21,4 @@ public interface AnimUtils {
         playAnimation(ent, AnimationManager.byKey(animation));
     }
 
-    static void playAnimation(LivingEntity ent, AnimationManager.AnimationAccessor<? extends StaticAnimation> animation, float convert){
-        if (ent != null && animation != null){
-            LivingEntityPatch<?> patch = EpicFightCapabilities.getEntityPatch(ent, LivingEntityPatch.class);
-            if (patch != null){
-                patch.playAnimationSynchronized(animation, convert);
-            }
-        }
-    }
-
-    static void playAnimation(LivingEntity ent, String animation, float convert){
-        playAnimation(ent, AnimationManager.byKey(animation), convert);
-    }
 }
