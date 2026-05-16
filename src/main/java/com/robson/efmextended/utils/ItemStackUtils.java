@@ -47,6 +47,16 @@ public interface ItemStackUtils {
         return 0;
     }
 
+    static float getPushRange(ItemStack stack){
+        if (stack != null){
+            CompoundTag tag = ItemCapabilityReloadListenerMixin.getCompounds().get(stack.getItem());
+            if (tag != null){
+                return tag.getFloat("push_range");
+            }
+        }
+        return 0;
+    }
+
     static float getCriticalChance(ItemStack itemStack){
         if (itemStack != null){
             CompoundTag tag = ItemCapabilityReloadListenerMixin.getCompounds().get(itemStack.getItem());

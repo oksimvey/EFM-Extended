@@ -1,9 +1,13 @@
 package com.robson.efmextended.utils;
 
 import net.minecraft.world.entity.player.Player;
+import yesman.epicfight.api.collider.OBBCollider;
 import yesman.epicfight.client.input.EpicFightKeyMappings;
 
+import java.util.concurrent.TimeUnit;
+
 import static com.robson.efmextended.utils.CustomMotionsHandler.ACTIVE_HEAVY;
+import static com.robson.efmextended.utils.CustomMotionsHandler.pushingEntities;
 import static yesman.epicfight.client.events.engine.ControlEngine.isKeyDown;
 
 public class CustomKey {
@@ -30,13 +34,17 @@ public class CustomKey {
             this.isPressed = true;
             if (isKeyDown(EpicFightKeyMappings.GUARD)){
 
-                    CustomMotionsHandler.performPushAttack(player);
-                    return;
-
+                CustomMotionsHandler.performPushAttack(player);
+                return;
             }
         }
+        if (pushingEntities.contains(player)){
+            return;
+        }
 
-        if (longPressTriggered && ACTIVE_HEAVY.containsKey(player.getUUID())  && player.level().isClientSide){
+
+
+        if (longPressTriggered && ACTIVE_HEAVY.containsKey(player.getUUID())){
             ACTIVE_HEAVY.put(player.getUUID(), (byte)Math.min (ACTIVE_HEAVY.get(player.getUUID()) + 1, 60));
         }
 
@@ -50,8 +58,11 @@ public class CustomKey {
 
                 CustomMotionsHandler.performHeavyAttack(player);
 
+
+
                 this.longPressTriggered = true;
-                ACTIVE_HEAVY.put(player.getUUID(), (byte) 1);
+
+                Scheduler.schedule(()->ACTIVE_HEAVY.put(player.getUUID(), (byte) 1), 50, TimeUnit.MILLISECONDS);
 
             }
         }

@@ -6,13 +6,15 @@
   "injectors": {
     "defaultRequire": 1
   },
-  "refmap": "mixins.efmextended.refmap.json",
+  "refmap": "mixins.efm_extended.refmap.json",
   "mixins": [
     "AttackAnimationMixin",
+    "AttackAnimationPhaseMixin",
     "BasicAttackMixin",
     "DodgeSkillMixin",
     "GuardSkillMixin",
     "ItemCapabilityReloadListenerMixin",
+    "LivingEntityMixin",
     "PlayerPatchMixin",
     "WeaponTypeReloadListenerMixin"
   ],

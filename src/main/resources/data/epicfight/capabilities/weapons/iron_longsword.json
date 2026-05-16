@@ -7,5 +7,6 @@
   "push_impact": 10,
   "critical_multiplier": 2.5,
   "critical_chance": 25,
-  "heavy_multiplier": 1.5
+  "heavy_multiplier": 1.5,
+  "push_range": 2
 }

@@ -89,6 +89,11 @@ public class ClientEvents {
             if (push_impact > 0){
                 event.getToolTip().add( Component.literal(" " + push_impact + " Push Impact"));
             }
+            float push_range = ItemStackUtils.getPushRange(stack);
+            if (push_range > 0){
+                event.getToolTip().add( Component.literal(" " + push_range + " Blocks Push Range"));
+            }
+
             float pushstamina = ItemStackUtils.getPushConsumption(stack);
             if (pushstamina > 0){
                 event.getToolTip().add(Component.literal(" " + pushstamina + "% Stamina Consumption On Push"));

@@ -27,6 +27,8 @@ public interface CustomMotionsHandler {
         if (player != null) {
             PlayerPatch<?> playerPatch = EpicFightCapabilities.getEntityPatch(player, PlayerPatch.class);
             if (playerPatch != null && !playerPatch.getEntityState().attacking()) {
+
+
                 List<String> heavyMotions = ItemStackUtils.getHeavyMotion(player, player.getMainHandItem());
                 if (heavyMotions.isEmpty()) {
                     return;
@@ -53,7 +55,7 @@ public interface CustomMotionsHandler {
 
     static void performPushAttack(Player player) {
         PlayerPatch<?> playerPatch = EpicFightCapabilities.getEntityPatch(player, PlayerPatch.class);
-        if (playerPatch != null && playerPatch.getSkill(SkillSlots.GUARD).getSkill() instanceof GuardSkill && !playerPatch.getEntityState().attacking() && playerPatch.getEntityState().canBasicAttack()) {
+        if (playerPatch != null && playerPatch.getSkill(SkillSlots.GUARD).getSkill() instanceof GuardSkill && !playerPatch.getEntityState().attacking() && playerPatch.getEntityState().canBasicAttack() ) {
             float staminatoconsume = playerPatch.getMaxStamina() * (ItemStackUtils.getPushConsumption(player.getMainHandItem()) / 100f);
             float currentstamina = playerPatch.getStamina();
             if (currentstamina >= staminatoconsume) {
