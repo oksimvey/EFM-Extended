@@ -17,6 +17,7 @@ public class PlayerSetup {
     public static void onPlayerSetup(PlayerEvent.PlayerLoggedInEvent event){
         if (event.getEntity() != null){
             ClientDataHandler.CLIENT_DATA_MANAGER.put(event.getEntity(), new ClientDataHandler(new CustomKey((byte) 12), new DodgeHandler()));
+       
             event.getEntity().getPersistentData().remove("efm_heavy_counter");
             event.getEntity().getMainHandItem().getOrCreateTag().remove("performing_efm_critical");
         }

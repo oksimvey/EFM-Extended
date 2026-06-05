@@ -35,6 +35,7 @@ import static com.robson.efmextended.utils.CustomMotionsHandler.pushingEntities;
 public abstract class AttackAnimationMixin extends ActionAnimation {
 
 
+
     @Shadow
     public abstract AttackAnimation.Phase getPhaseByTime(float elapsedTime);
 

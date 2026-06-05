@@ -21,12 +21,17 @@ public interface CustomMotionsHandler {
 
     List<LivingEntity> pushingEntities = new ArrayList<>();
 
+    
+
     ConcurrentHashMap<UUID, Byte> ACTIVE_HEAVY = new ConcurrentHashMap<>();
+
+
 
     static void performHeavyAttack(Player player) {
         if (player != null) {
             PlayerPatch<?> playerPatch = EpicFightCapabilities.getEntityPatch(player, PlayerPatch.class);
             if (playerPatch != null && !playerPatch.getEntityState().attacking()) {
+
 
 
                 List<String> heavyMotions = ItemStackUtils.getHeavyMotion(player, player.getMainHandItem());

@@ -30,6 +30,7 @@ public abstract class AnimationTrailMixin extends AbstractTrailParticle<LivingEn
 
 
 
+
     @Inject(
             method = "<init>",
             at = @At("TAIL")
