@@ -15,7 +15,9 @@ public class EFMExtendedMod {
     public static final String MOD_ID = "efm_extended";
 
     public EFMExtendedMod(FMLJavaModLoadingContext context) {
+        
         final IEventBus bus = context.getModEventBus();
         bus.addListener(EFMExtendedAnimations::registerAnimations);
     }
+
 }

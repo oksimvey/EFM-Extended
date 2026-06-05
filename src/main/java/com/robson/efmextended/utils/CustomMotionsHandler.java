@@ -1,77 +1,161 @@
 package com.robson.efmextended.utils;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.types.StaticAnimation;
+import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.gameasset.EpicFightSkills;
 import yesman.epicfight.skill.*;
 import yesman.epicfight.skill.guard.GuardSkill;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
+import yesman.epicfight.world.capabilities.item.Style;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import com.robson.efmextended.combosystem.ComboNode;
+import com.robson.efmextended.combosystem.ComboStart;
+import com.robson.efmextended.mixins.ItemCapabilityReloadListenerMixin;
+
 public interface CustomMotionsHandler {
+
+    enum AttackType {
+        LIGHT,
+        HEAVY
+    }
+
+    ConcurrentHashMap<UUID, List<AttackType>> MOTIONS_HANDLER = new ConcurrentHashMap<>();
+
+    static void resetMotions(Player player) {
+        MOTIONS_HANDLER.put(player.getUUID(), new ArrayList<>());
+    }
 
     List<LivingEntity> pushingEntities = new ArrayList<>();
 
-    
-
     ConcurrentHashMap<UUID, Byte> ACTIVE_HEAVY = new ConcurrentHashMap<>();
 
-
-
-    static void performHeavyAttack(Player player) {
+    static void performCustomMotionLightAttack(Player player) {
         if (player != null) {
             PlayerPatch<?> playerPatch = EpicFightCapabilities.getEntityPatch(player, PlayerPatch.class);
+
             if (playerPatch != null && !playerPatch.getEntityState().attacking()) {
+                CompoundTag customMotions = ItemStackUtils.getCustomMotion(player, player.getMainHandItem());
+                if (customMotions != null) {
 
+                    if (player.isSprinting()) {
+                        AnimUtils.playAnimation(player, customMotions.getString("light_dash"));
+                        return;
+                    }
+                    if (player.getDeltaMovement().y() > 0.0D) {
+                        AnimUtils.playAnimation(player, "light_airslash");
+                        return;
+                    }
 
+                    List<AttackType> currentMotions = MOTIONS_HANDLER.getOrDefault(player.getUUID(), new ArrayList<>());
 
-                List<String> heavyMotions = ItemStackUtils.getHeavyMotion(player, player.getMainHandItem());
-                if (heavyMotions.isEmpty()) {
-                    return;
+                    CompoundTag currentNode = customMotions.copy();
+
+                    for (AttackType attack : currentMotions) {
+                        if (attack == AttackType.LIGHT) {
+                            if (currentNode.contains("next_light")) {
+                                currentNode = currentNode.getCompound("next_light");
+                            } 
+                            else
+                                resetMotions(player);
+                        } 
+                        else if (attack == AttackType.HEAVY) {
+                            if (currentNode.contains("next_heavy")) {
+                                currentNode = currentNode.getCompound("next_heavy");
+                            } 
+                            else
+                                resetMotions(player);
+                        }
+
+                    }
+                    if (currentNode.contains("motion")) {
+                        AnimUtils.playAnimation(player, currentNode.getString("motion"));
+                    
+                    } 
+                    else
+                        resetMotions(player);
                 }
-                if (player.isSprinting()) {
-                    AnimUtils.playAnimation(player, heavyMotions.get(heavyMotions.size() - 2));
-                    return;
+            }
+        }
+    }
+
+    static void performCustomMotionHeavyAttack(Player player) {
+        if (player != null) {
+            PlayerPatch<?> playerPatch = EpicFightCapabilities.getEntityPatch(player, PlayerPatch.class);
+
+            if (playerPatch != null && !playerPatch.getEntityState().attacking()) {
+                CompoundTag customMotions = ItemStackUtils.getCustomMotion(player, player.getMainHandItem());
+                if (customMotions != null) {
+
+                    if (player.isSprinting()) {
+                        AnimUtils.playAnimation(player, customMotions.getString("heavy_dash"));
+                        return;
+                    }
+                    if (player.getDeltaMovement().y() > 0.0D) {
+                        AnimUtils.playAnimation(player, "heavy_airslash");
+                        return;
+                    }
+
+                    List<AttackType> currentMotions = MOTIONS_HANDLER.getOrDefault(player.getUUID(), new ArrayList<>());
+
+                    CompoundTag currentNode = customMotions.copy();
+
+                    for (AttackType attack : currentMotions) {
+                        if (attack == AttackType.LIGHT) {
+                            if (currentNode.contains("next_light")) {
+                                currentNode = currentNode.getCompound("next_light");
+                            } else
+                                resetMotions(player);
+                        } else if (attack == AttackType.HEAVY) {
+                            if (currentNode.contains("next_heavy")) {
+                                currentNode = currentNode.getCompound("next_heavy");
+                            } else
+                                resetMotions(player);
+                        }
+
+                    }
+                    if (currentNode.contains("motion")) {
+                        AnimUtils.playAnimation(player, currentNode.getString("motion"));
+                    } 
+                    else
+                        resetMotions(player);
                 }
-                if (player.getDeltaMovement().y() > 0.0D) {
-                    AnimUtils.playAnimation(player, heavyMotions.get(heavyMotions.size() - 1));
-                    return;
-                }
-                SkillDataManager dataManager = playerPatch.getSkill(EpicFightSkills.BASIC_ATTACK).getDataManager();
-                int comboCounter = (Integer) dataManager.getDataValue((SkillDataKey) SkillDataKeys.COMBO_COUNTER.get());
-                ++comboCounter;
-                if (comboCounter >= heavyMotions.size() - 2) {
-                    comboCounter = 0;
-                }
-                dataManager.setData(SkillDataKeys.COMBO_COUNTER.get(), comboCounter);
-                AnimUtils.playAnimation(player, heavyMotions.get(comboCounter));
             }
         }
     }
 
     static void performPushAttack(Player player) {
         PlayerPatch<?> playerPatch = EpicFightCapabilities.getEntityPatch(player, PlayerPatch.class);
-        if (playerPatch != null && playerPatch.getSkill(SkillSlots.GUARD).getSkill() instanceof GuardSkill && !playerPatch.getEntityState().attacking() && playerPatch.getEntityState().canBasicAttack() ) {
-            float staminatoconsume = playerPatch.getMaxStamina() * (ItemStackUtils.getPushConsumption(player.getMainHandItem()) / 100f);
+        if (playerPatch != null && playerPatch.getSkill(SkillSlots.GUARD).getSkill() instanceof GuardSkill
+                && !playerPatch.getEntityState().attacking() && playerPatch.getEntityState().canBasicAttack()) {
+            float staminatoconsume = playerPatch.getMaxStamina()
+                    * (ItemStackUtils.getPushConsumption(player.getMainHandItem()) / 100f);
             float currentstamina = playerPatch.getStamina();
             if (currentstamina >= staminatoconsume) {
                 playerPatch.setStamina(currentstamina - staminatoconsume);
                 String pushmotion = ItemStackUtils.getPushMotion(player, player.getMainHandItem());
                 if (!pushmotion.isEmpty()) {
-                    AnimationManager.AnimationAccessor<? extends StaticAnimation> animation = AnimationManager.byKey(pushmotion);
+                    AnimationManager.AnimationAccessor<? extends StaticAnimation> animation = AnimationManager
+                            .byKey(pushmotion);
                     if (animation != null) {
                         pushingEntities.add(player);
                         AnimUtils.playAnimation(player, animation);
-                        removeEntityFromPushingList(player,(int) (600 * (animation.get().getTotalTime() / animation.get().getPlaySpeed(playerPatch, animation.get()))));
+                        removeEntityFromPushingList(player, (int) (600 * (animation.get().getTotalTime()
+                                / animation.get().getPlaySpeed(playerPatch, animation.get()))));
                     }
                 }
             }

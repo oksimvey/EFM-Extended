@@ -11,55 +11,55 @@ import yesman.epicfight.gameasset.Animations;
 public class ComboNode {
 
 
-    private final ComboNode lightAttack;
+    private final ComboNode nextLightAttack;
 
-    private final ComboNode heavyAttack;
+    private final ComboNode nextHeavyAttackComboNode;
 
     private final AnimationManager.AnimationAccessor<? extends StaticAnimation> motion;
 
-    public ComboNode(ComboNode lightAttack, ComboNode heavyAttack,@NotNull AnimationManager.AnimationAccessor<? extends StaticAnimation> motion) {
-        this.lightAttack = lightAttack;
-        this.heavyAttack = heavyAttack;
+    public ComboNode(ComboNode nextLightAttack, ComboNode nextHeavyAttackComboNode,@NotNull AnimationManager.AnimationAccessor<? extends StaticAnimation> motion) {
+        this.nextLightAttack = nextLightAttack;
+        this.nextHeavyAttackComboNode = nextHeavyAttackComboNode;
         this.motion = motion;
     }
 
 
     public ComboNode(@NotNull AnimationManager.AnimationAccessor<? extends StaticAnimation> motion) {
         this.motion = motion;
-        this.lightAttack = null;
-        this.heavyAttack = null;
+        this.nextLightAttack = null;
+        this.nextHeavyAttackComboNode = null;
     }
 
-    public ComboNode(ComboNode lightattack, @NotNull AnimationManager.AnimationAccessor<? extends StaticAnimation> motion) {
-        this.lightAttack = lightattack;
-        this.heavyAttack = null;
+    public ComboNode(ComboNode nextLightAttack, @NotNull AnimationManager.AnimationAccessor<? extends StaticAnimation> motion) {
+        this.nextLightAttack = nextLightAttack;
+        this.nextHeavyAttackComboNode = null;
         this.motion = motion;
     }
 
-    public ComboNode(@NotNull AnimationManager.AnimationAccessor<? extends StaticAnimation> motion, ComboNode heavyAttack){
-        this.heavyAttack = heavyAttack;
-        this.lightAttack = null;
+    public ComboNode(@NotNull AnimationManager.AnimationAccessor<? extends StaticAnimation> motion, ComboNode nextHeavyAttackComboNode){
+        this.nextHeavyAttackComboNode = nextHeavyAttackComboNode;
+        this.nextLightAttack = null;
         this.motion = motion;
     }
 
     public ComboNode getLightNode(){
-        return this.lightAttack;
+        return this.nextLightAttack;
     }
 
     public ComboNode getHeavyNode(){
-        return this.heavyAttack;
+        return this.nextHeavyAttackComboNode;
     }
 
     public AnimationManager.AnimationAccessor<? extends StaticAnimation> getMotion(){
         return this.motion;
     }
 
-    public AnimationManager.AnimationAccessor<? extends StaticAnimation> getLightAttack(){
-        return this.lightAttack.motion;
+    public AnimationManager.AnimationAccessor<? extends StaticAnimation> getNextLightAttack(){
+        return this.nextLightAttack.motion;
     }
 
-    public AnimationManager.AnimationAccessor<? extends StaticAnimation> getHeavyAttack(){
-        return this.heavyAttack.motion;
+    public AnimationManager.AnimationAccessor<? extends StaticAnimation> getNextHeavyAttackComboNode(){
+        return this.nextHeavyAttackComboNode.motion;
     }
 
     

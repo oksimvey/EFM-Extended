@@ -55,9 +55,7 @@ public abstract class AttackAnimationMixin extends ActionAnimation {
     private void modifyHitSound(LivingEntityPatch<?> entitypatch, AttackAnimation.Phase phase,CallbackInfoReturnable<SoundEvent> cir) {
         if (entitypatch instanceof PlayerPatch<?> playerPatch && HurtEvents.criticalPlayers.contains(playerPatch.getOriginal())){
             cir.setReturnValue(SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(EFMExtendedMod.MOD_ID, "critical_impact")));
-
         }
-
     }
 
 

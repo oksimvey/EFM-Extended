@@ -77,6 +77,29 @@ public interface ItemStackUtils {
         return 0;
     }
 
+       static CompoundTag getCustomMotion(LivingEntity ent, ItemStack itemStack){
+
+        if (ent != null && itemStack != null){
+            String type = getItemType(itemStack);
+            if (!type.isEmpty()){
+                CompoundTag tags = WeaponTypeReloadListenerMixin.getCustomWeaponTypeTags().get(new ResourceLocation(type));
+                if (tags != null){
+                    CompoundTag custommotions = tags.getCompound("custom_combos");
+                    if (custommotions != null){
+                        String style = getStyle(ent);
+                        if (!style.isEmpty()) {
+                            CompoundTag stylemotions = custommotions.getCompound(style);
+                            if (stylemotions != null && !stylemotions.isEmpty()){
+                                return stylemotions;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     static List<String> getHeavyMotion(LivingEntity ent, ItemStack itemStack){
         List<String> heavyMotions = new ArrayList<>();
         if (ent != null && itemStack != null){

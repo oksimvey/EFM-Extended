@@ -1,10 +1,15 @@
 package com.robson.efmextended.utils;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import yesman.epicfight.api.collider.OBBCollider;
 import yesman.epicfight.client.input.EpicFightKeyMappings;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import com.robson.efmextended.utils.CustomMotionsHandler.AttackType;
 
 import static com.robson.efmextended.utils.CustomMotionsHandler.ACTIVE_HEAVY;
 import static com.robson.efmextended.utils.CustomMotionsHandler.pushingEntities;
@@ -29,23 +34,26 @@ public class CustomKey {
     }
 
     public void onPressTick(Player player) {
+
+        List<CustomMotionsHandler.AttackType> arr = CustomMotionsHandler.MOTIONS_HANDLER.getOrDefault(player.getUUID(),
+                new ArrayList<>());
+
         if (!this.isPressed) {
+
             this.presscounter = 0;
             this.isPressed = true;
-            if (isKeyDown(EpicFightKeyMappings.GUARD)){
+            if (isKeyDown(EpicFightKeyMappings.GUARD)) {
 
                 CustomMotionsHandler.performPushAttack(player);
                 return;
             }
         }
-        if (pushingEntities.contains(player)){
+        if (pushingEntities.contains(player)) {
             return;
         }
 
-
-
-        if (longPressTriggered && ACTIVE_HEAVY.containsKey(player.getUUID())){
-            ACTIVE_HEAVY.put(player.getUUID(), (byte)Math.min (ACTIVE_HEAVY.get(player.getUUID()) + 1, 60));
+        if (longPressTriggered && ACTIVE_HEAVY.containsKey(player.getUUID())) {
+            ACTIVE_HEAVY.put(player.getUUID(), (byte) Math.min(ACTIVE_HEAVY.get(player.getUUID()) + 1, 60));
         }
 
         if (this.isPressed() && !longPressTriggered) {
@@ -56,13 +64,23 @@ public class CustomKey {
                 this.presscounter = 0;
                 this.isPressed = false;
 
-                CustomMotionsHandler.performHeavyAttack(player);
+                arr.add(AttackType.HEAVY);
 
+                CustomMotionsHandler.MOTIONS_HANDLER.put(player.getUUID(), arr);
 
+                
+                CustomMotionsHandler.performCustomMotionHeavyAttack(player);
+
+                String attacks = "";
+
+                for (CustomMotionsHandler.AttackType attackType : arr) {
+                    attacks += attackType + " ";
+                }
+                player.sendSystemMessage(Component.literal(attacks));
 
                 this.longPressTriggered = true;
 
-                Scheduler.schedule(()->ACTIVE_HEAVY.put(player.getUUID(), (byte) 1), 50, TimeUnit.MILLISECONDS);
+                Scheduler.schedule(() -> ACTIVE_HEAVY.put(player.getUUID(), (byte) 1), 50, TimeUnit.MILLISECONDS);
 
             }
         }
@@ -73,9 +91,28 @@ public class CustomKey {
     }
 
     public void onRelease(Player player) {
+        List<CustomMotionsHandler.AttackType> arr = CustomMotionsHandler.MOTIONS_HANDLER.getOrDefault(player.getUUID(),
+                new ArrayList<>());
+        if (!this.longPressTriggered && this.isPressed) {
+
+            arr.add(AttackType.LIGHT);
+            CustomMotionsHandler.MOTIONS_HANDLER.put(player.getUUID(), arr);
+
+             CustomMotionsHandler.performCustomMotionLightAttack(player);
+
+           
+            String attacks = "";
+
+            for (CustomMotionsHandler.AttackType attackType : arr) {
+                attacks += attackType + " ";
+            }
+
+            player.sendSystemMessage(Component.literal(attacks));
+        }
         this.isPressed = false;
         this.presscounter = 0;
         this.longPressTriggered = false;
         ACTIVE_HEAVY.remove(player.getUUID());
+
     }
 }
