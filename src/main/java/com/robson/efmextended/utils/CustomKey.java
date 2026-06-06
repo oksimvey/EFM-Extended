@@ -4,6 +4,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import yesman.epicfight.api.collider.OBBCollider;
 import yesman.epicfight.client.input.EpicFightKeyMappings;
+import yesman.epicfight.world.capabilities.EpicFightCapabilities;
+import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +37,7 @@ public class CustomKey {
 
     public void onPressTick(Player player) {
 
-        List<CustomMotionsHandler.AttackType> arr = CustomMotionsHandler.MOTIONS_HANDLER.getOrDefault(player.getUUID(),
-                new ArrayList<>());
+       
 
         if (!this.isPressed) {
 
@@ -64,19 +65,14 @@ public class CustomKey {
                 this.presscounter = 0;
                 this.isPressed = false;
 
+                 List<CustomMotionsHandler.AttackType> arr = CustomMotionsHandler.MOTIONS_HANDLER.getOrDefault(player.getUUID(),
+                new ArrayList<>());
+
                 arr.add(AttackType.HEAVY);
 
                 CustomMotionsHandler.MOTIONS_HANDLER.put(player.getUUID(), arr);
 
-                
                 CustomMotionsHandler.performCustomMotionHeavyAttack(player);
-
-                String attacks = "";
-
-                for (CustomMotionsHandler.AttackType attackType : arr) {
-                    attacks += attackType + " ";
-                }
-                player.sendSystemMessage(Component.literal(attacks));
 
                 this.longPressTriggered = true;
 
@@ -90,24 +86,27 @@ public class CustomKey {
         return this.isPressed;
     }
 
-    public void onRelease(Player player) {
-        List<CustomMotionsHandler.AttackType> arr = CustomMotionsHandler.MOTIONS_HANDLER.getOrDefault(player.getUUID(),
-                new ArrayList<>());
-        if (!this.longPressTriggered && this.isPressed) {
 
+    private boolean autocooldown = false;
+
+    public void onRelease(Player player) {
+       
+
+        int level = EpicFightCapabilities.getEntityPatch(player, LivingEntityPatch.class).getEntityState().getLevel();
+
+        if (!this.longPressTriggered && this.isPressed && (level == 0 || level > 2) && !autocooldown) {
+
+            autocooldown = true;
+
+             List<CustomMotionsHandler.AttackType> arr = CustomMotionsHandler.MOTIONS_HANDLER.getOrDefault(player.getUUID(),
+                new ArrayList<>());
             arr.add(AttackType.LIGHT);
             CustomMotionsHandler.MOTIONS_HANDLER.put(player.getUUID(), arr);
 
-             CustomMotionsHandler.performCustomMotionLightAttack(player);
+            CustomMotionsHandler.performCustomMotionLightAttack(player);
 
-           
-            String attacks = "";
+            Scheduler.schedule(()->autocooldown = false, 500, TimeUnit.MILLISECONDS);
 
-            for (CustomMotionsHandler.AttackType attackType : arr) {
-                attacks += attackType + " ";
-            }
-
-            player.sendSystemMessage(Component.literal(attacks));
         }
         this.isPressed = false;
         this.presscounter = 0;

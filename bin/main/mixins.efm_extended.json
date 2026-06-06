@@ -1,0 +1,28 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_17",
+  "package": "com.robson.efmextended.mixins",
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "refmap": "mixins.efm_extended.refmap.json",
+  "mixins": [
+    "AttackAnimationMixin",
+    "AttackAnimationPhaseMixin",
+    "BasicAttackMixin",
+    "DodgeSkillMixin",
+    "GuardSkillMixin",
+    "ItemCapabilityReloadListenerMixin",
+    "LivingEntityMixin",
+    "PlayerPatchMixin",
+    "WeaponTypeReloadListenerMixin"
+  ],
+  "client": [
+    "AnimationTrailMixin",
+    "ItemRendererMixin",
+    "RenderBufferInterface",
+    "RenderBuffersMixin",
+    "TrailInfoAccessorMixin"
+  ]
+}

@@ -15,6 +15,7 @@ import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 import yesman.epicfight.world.capabilities.item.Style;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,8 +24,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import com.robson.efmextended.combosystem.ComboNode;
-import com.robson.efmextended.combosystem.ComboStart;
 import com.robson.efmextended.mixins.ItemCapabilityReloadListenerMixin;
 
 public interface CustomMotionsHandler {
@@ -54,10 +53,12 @@ public interface CustomMotionsHandler {
 
                     if (player.isSprinting()) {
                         AnimUtils.playAnimation(player, customMotions.getString("light_dash"));
+                        resetMotions(player);
                         return;
                     }
-                    if (player.getDeltaMovement().y() > 0.0D) {
+                    if (EpicFightCapabilities.getEntityPatch(player, PlayerPatch.class).isInAir()) {
                         AnimUtils.playAnimation(player, "light_airslash");
+                         resetMotions(player);
                         return;
                     }
 
@@ -70,24 +71,45 @@ public interface CustomMotionsHandler {
                             if (currentNode.contains("next_light")) {
                                 currentNode = currentNode.getCompound("next_light");
                             } 
-                            else
-                                resetMotions(player);
+                            else {  
+
+                                    List<AttackType>arr = new ArrayList<>();
+
+                                arr.add(AttackType.LIGHT);
+                                
+                               MOTIONS_HANDLER.put(player.getUUID(), arr);
+
+
+                                 currentNode = customMotions.getCompound("next_light");
+
+                                 break;    
+                            }
                         } 
                         else if (attack == AttackType.HEAVY) {
                             if (currentNode.contains("next_heavy")) {
                                 currentNode = currentNode.getCompound("next_heavy");
                             } 
-                            else
-                                resetMotions(player);
-                        }
+                            else {
 
+                              List<AttackType>arr = new ArrayList<>();
+
+                                arr.add(AttackType.HEAVY);
+                                
+                               MOTIONS_HANDLER.put(player.getUUID(), arr);
+
+
+                                 currentNode = customMotions.getCompound("next_heavy");
+
+                                 break;
+                                
+                            }
+                        }
                     }
                     if (currentNode.contains("motion")) {
                         AnimUtils.playAnimation(player, currentNode.getString("motion"));
                     
                     } 
-                    else
-                        resetMotions(player);
+                    else  resetMotions(player);
                 }
             }
         }
@@ -103,11 +125,13 @@ public interface CustomMotionsHandler {
 
                     if (player.isSprinting()) {
                         AnimUtils.playAnimation(player, customMotions.getString("heavy_dash"));
-                        return;
+                         resetMotions(player);
+                     return;
                     }
-                    if (player.getDeltaMovement().y() > 0.0D) {
+                    if (EpicFightCapabilities.getEntityPatch(player, PlayerPatch.class).isInAir()) {
                         AnimUtils.playAnimation(player, "heavy_airslash");
-                        return;
+                         resetMotions(player);
+                       return;
                     }
 
                     List<AttackType> currentMotions = MOTIONS_HANDLER.getOrDefault(player.getUUID(), new ArrayList<>());
@@ -116,23 +140,52 @@ public interface CustomMotionsHandler {
 
                     for (AttackType attack : currentMotions) {
                         if (attack == AttackType.LIGHT) {
+
                             if (currentNode.contains("next_light")) {
                                 currentNode = currentNode.getCompound("next_light");
-                            } else
-                                resetMotions(player);
-                        } else if (attack == AttackType.HEAVY) {
+                            } 
+
+                            else { 
+
+                                List<AttackType>arr = new ArrayList<>();
+
+                                arr.add(AttackType.LIGHT);
+
+                               MOTIONS_HANDLER.put(player.getUUID(), arr);
+
+                                currentNode = customMotions.getCompound("next_light");
+
+                                break;
+                            }
+                        } 
+
+                        else if (attack == AttackType.HEAVY) {
                             if (currentNode.contains("next_heavy")) {
                                 currentNode = currentNode.getCompound("next_heavy");
-                            } else
-                                resetMotions(player);
+                            } 
+                            else {
+                               
+                                 List<AttackType>arr = new ArrayList<>();
+
+                                arr.add(AttackType.HEAVY);
+                                
+                               MOTIONS_HANDLER.put(player.getUUID(), arr);
+
+
+                                 currentNode = customMotions.getCompound("next_heavy");
+
+                                 break;
+
+                            }
                         }
 
                     }
                     if (currentNode.contains("motion")) {
                         AnimUtils.playAnimation(player, currentNode.getString("motion"));
                     } 
-                    else
-                        resetMotions(player);
+
+                    else  resetMotions(player);
+
                 }
             }
         }
