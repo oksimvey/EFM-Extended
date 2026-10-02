@@ -66,14 +66,22 @@ public class ClientEvents {
     public static void renderToolTips(ItemTooltipEvent event){
         if (event != null){
             ItemStack stack = event.getItemStack();
-            float critical_chance = ItemStackUtils.getCriticalChance(stack);
-            if (critical_chance > 0){
-                event.getToolTip().add( Component.literal(" " + critical_chance + "% Critical Hit Chance"));
+            Player player = event.getEntity();
+
+            if (ItemStackUtils.hasCriticalChance(stack)){
+                float criticalChance = player != null
+                        ? ItemStackUtils.getCriticalChance(player, stack)
+                        : ItemStackUtils.getCriticalChance(stack);
+                event.getToolTip().add(Component.literal(" " + criticalChance + "% Critical Hit Chance"));
             }
-            float critical_multiplier = ItemStackUtils.getCriticalMultiplier(stack);
-            if (critical_multiplier > 0){
-                event.getToolTip().add( Component.literal(" " + critical_multiplier + "x Critical Hit Multiplier"));
+
+            if (ItemStackUtils.hasCriticalMultiplier(stack)){
+                float criticalMultiplier = player != null
+                        ? ItemStackUtils.getCriticalMultiplier(player, stack)
+                        : ItemStackUtils.getCriticalMultiplier(stack);
+                event.getToolTip().add(Component.literal(" " + criticalMultiplier + "x Critical Hit Multiplier"));
             }
+
             float heavy_multiplier = ItemStackUtils.getHeavyMultiplier(stack);
             if (heavy_multiplier > 0){
                 event.getToolTip().add( Component.literal(" " + heavy_multiplier + "x Heavy Hit Multiplier"));
