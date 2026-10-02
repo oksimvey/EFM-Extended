@@ -1,16 +1,18 @@
 package com.robson.efmextended.utils;
 
+import com.robson.efmextended.gameasset.EFMExtendedAttributes;
 import com.robson.efmextended.mixins.ItemCapabilityReloadListenerMixin;
 import com.robson.efmextended.mixins.WeaponTypeReloadListenerMixin;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.ItemStack;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
-import yesman.epicfight.world.capabilities.item.CapabilityItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,13 +30,26 @@ public interface ItemStackUtils {
     }
 
     static float getCriticalMultiplier(ItemStack itemStack){
-        if (itemStack != null){
-            CompoundTag tag = ItemCapabilityReloadListenerMixin.getCompounds().get(itemStack.getItem());
-            if (tag != null){
-                return tag.getFloat("critical_multiplier");
-            }
+        CompoundTag tag = getWeaponTag(itemStack);
+        if (tag != null){
+            return tag.getFloat("critical_multiplier");
         }
         return 0;
+    }
+
+    static float getCriticalMultiplier(LivingEntity entity, ItemStack itemStack){
+        float resolved = resolveCriticalAttribute(
+                entity,
+                itemStack,
+                EFMExtendedAttributes.CRITICAL_MULTIPLIER.get(),
+                "critical_multiplier",
+                1.0F
+        );
+        return Math.max(0.0F, Math.min(1024.0F, resolved));
+    }
+
+    static boolean hasCriticalMultiplier(ItemStack itemStack){
+        return hasNumericWeaponValue(itemStack, "critical_multiplier");
     }
 
     static float getHeavyMultiplier(ItemStack stack){
@@ -58,13 +73,26 @@ public interface ItemStackUtils {
     }
 
     static float getCriticalChance(ItemStack itemStack){
-        if (itemStack != null){
-            CompoundTag tag = ItemCapabilityReloadListenerMixin.getCompounds().get(itemStack.getItem());
-            if (tag != null){
-                return tag.getFloat("critical_chance");
-            }
+        CompoundTag tag = getWeaponTag(itemStack);
+        if (tag != null){
+            return tag.getFloat("critical_chance");
         }
         return 0;
+    }
+
+    static float getCriticalChance(LivingEntity entity, ItemStack itemStack){
+        float resolved = resolveCriticalAttribute(
+                entity,
+                itemStack,
+                EFMExtendedAttributes.CRITICAL_CHANCE.get(),
+                "critical_chance",
+                0.0F
+        );
+        return Math.max(0.0F, Math.min(100.0F, resolved));
+    }
+
+    static boolean hasCriticalChance(ItemStack itemStack){
+        return hasNumericWeaponValue(itemStack, "critical_chance");
     }
 
     static float getItemStaminaOnBlock(ItemStack itemStack){
@@ -77,7 +105,7 @@ public interface ItemStackUtils {
         return 0;
     }
 
-       static CompoundTag getCustomMotion(LivingEntity ent, ItemStack itemStack){
+    static CompoundTag getCustomMotion(LivingEntity ent, ItemStack itemStack){
 
         if (ent != null && itemStack != null){
             String type = getItemType(itemStack);
@@ -113,7 +141,7 @@ public interface ItemStackUtils {
                         if (!style.isEmpty()) {
                             ListTag list = heavymotions.getList(style, 8);
                             for (int i = 0; i < list.size(); ++i) {
-                                    heavyMotions.add(list.getString(i));
+                                heavyMotions.add(list.getString(i));
                             }
                         }
                     }
@@ -190,5 +218,42 @@ public interface ItemStackUtils {
             }
         }
         return "";
+    }
+
+    private static CompoundTag getWeaponTag(ItemStack itemStack){
+        if (itemStack == null || itemStack.isEmpty()){
+            return null;
+        }
+        return ItemCapabilityReloadListenerMixin.getCompounds().get(itemStack.getItem());
+    }
+
+    private static boolean hasNumericWeaponValue(ItemStack itemStack, String key){
+        CompoundTag tag = getWeaponTag(itemStack);
+        return tag != null && tag.contains(key, Tag.TAG_ANY_NUMERIC);
+    }
+
+    private static float resolveCriticalAttribute(
+            LivingEntity entity,
+            ItemStack itemStack,
+            Attribute attribute,
+            String valueKey,
+            float defaultValue
+    ){
+        float attributeValue = entity != null ? (float) entity.getAttributeValue(attribute) : defaultValue;
+        CompoundTag tag = getWeaponTag(itemStack);
+
+        if (tag == null || !tag.contains(valueKey, Tag.TAG_ANY_NUMERIC)){
+            return attributeValue;
+        }
+
+        float weaponValue = tag.getFloat(valueKey);
+        String operation = tag.getString(valueKey + "_operation");
+
+        if ("add".equalsIgnoreCase(operation)){
+            return attributeValue + weaponValue;
+        }
+
+        // "set" is the explicit override operation and also the legacy/default behavior.
+        return weaponValue;
     }
 }
