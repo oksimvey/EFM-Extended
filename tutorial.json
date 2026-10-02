@@ -64,16 +64,10 @@
 
 //WEAPON CAPABILITY CHANGES
 //NOW U CAN ALSO SET NEW PARAMETERS ON THE WEAPON CAPABILITY .JSON FILE, SEE THE EXAMPLE BELOW
-//CRITICAL CHANCE AND CRITICAL MULTIPLIER ARE REAL PLAYER ATTRIBUTES:
-//  efm_extended:critical_chance      DEFAULT = 0.0 (%), RANGE = 0..100
-//  efm_extended:critical_multiplier  DEFAULT = 1.0 (x), RANGE = 0..1024
-//THE WEAPON CAN EITHER ADD TO THE PLAYER ATTRIBUTE OR SET/OVERRIDE THE EFFECTIVE VALUE.
-//IF *_operation IS OMITTED, "set" IS USED FOR BACKWARDS COMPATIBILITY WITH OLD WEAPON JSONS.
-//EXAMPLES:
-//  "critical_chance": 25, "critical_chance_operation": "add"       -> PLAYER CHANCE + 25%
-//  "critical_chance": 25, "critical_chance_operation": "set"       -> EXACTLY 25%
-//  "critical_multiplier": 0.5, "critical_multiplier_operation": "add" -> PLAYER MULTIPLIER + 0.5x
-//  "critical_multiplier": 2.5, "critical_multiplier_operation": "set" -> EXACTLY 2.5x
+//critical_chance and critical_multiplier use custom PLAYER ATTRIBUTES as their base values.
+//By default, a weapon value ADDS to the player attribute.
+//Use critical_chance_operation or critical_multiplier_operation = "set" only when the weapon must override the attribute directly.
+//Player defaults: critical chance = 0%, critical multiplier = 1.0x.
 
 {
   "type": "epicfight:test", //THAT IS THE TYPE OF THE WEAPON
@@ -82,8 +76,15 @@
   "dodge_cooldown":60, //THAT VALUE DETERMINES THE DURATION OF THE DODGE COOLDOWN
   "push_stamina": 25, //THAT VALUE DETERMINES THE STAMINA % CONSUMPTION WHEN USING THE PUSH SKILL
   "push_impact": 10, //THAT VALUE DETERMINES THE IMPACT OF THE PUSH SKILL, HIGHER VALUES MEANS MORE KNOCKBACK AND STUN TO ENTITIES
-  "critical_chance": 25,
-  "critical_chance_operation": "add",
-  "critical_multiplier": 0.5,
-  "critical_multiplier_operation": "add"
+
+  "critical_chance": 15, //ADDS +15 PERCENTAGE POINTS TO efm_extended:critical_chance
+  "critical_chance_operation": "add", //OPTIONAL: "add" IS THE DEFAULT. USE "set" TO OVERRIDE THE PLAYER ATTRIBUTE
+
+  "critical_multiplier": 0.5, //ADDS +0.5x TO efm_extended:critical_multiplier (1.0x BASE -> 1.5x)
+  "critical_multiplier_operation": "add" //OPTIONAL: "add" IS THE DEFAULT. USE "set" TO OVERRIDE THE PLAYER ATTRIBUTE
 }
+
+//EXAMPLE OVERRIDE:
+//"critical_chance": 100,
+//"critical_chance_operation": "set"
+//The effective critical chance becomes exactly 100%, regardless of the player's base attribute.
