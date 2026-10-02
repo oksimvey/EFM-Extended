@@ -35,7 +35,7 @@ public class HurtEvents {
                 }
 
             if (criticalPlayers.contains(player)) {
-                float multiplier = ItemStackUtils.getCriticalMultiplier(stack);
+                float multiplier = ItemStackUtils.getCriticalMultiplier(player, stack);
                 if (multiplier > 0) {
                     amount *= multiplier;
                 }
