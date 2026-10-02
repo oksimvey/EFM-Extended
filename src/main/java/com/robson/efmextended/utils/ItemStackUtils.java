@@ -141,7 +141,7 @@ public interface ItemStackUtils {
                         if (!style.isEmpty()) {
                             ListTag list = heavymotions.getList(style, 8);
                             for (int i = 0; i < list.size(); ++i) {
-                                heavyMotions.add(list.getString(i));
+                                    heavyMotions.add(list.getString(i));
                             }
                         }
                     }
@@ -249,11 +249,12 @@ public interface ItemStackUtils {
         float weaponValue = tag.getFloat(valueKey);
         String operation = tag.getString(valueKey + "_operation");
 
-        if ("add".equalsIgnoreCase(operation)){
-            return attributeValue + weaponValue;
+        if ("set".equalsIgnoreCase(operation)){
+            return weaponValue;
         }
 
-        // "set" is the explicit override operation and also the legacy/default behavior.
-        return weaponValue;
+        // Weapons add to the player's custom attribute by default.
+        // Use "*_operation": "set" only when a weapon must explicitly override it.
+        return attributeValue + weaponValue;
     }
 }
