@@ -100,10 +100,11 @@ public abstract class AttackAnimationMixin extends ActionAnimation {
                 if (pushingEntities.contains(playerPatch.getOriginal())){
                     return;
                 }
-                float chance = ItemStackUtils.getCriticalChance(playerPatch.getOriginal().getMainHandItem());
+                Player player = playerPatch.getOriginal();
+                float chance = ItemStackUtils.getCriticalChance(player, player.getMainHandItem());
                  if (ThreadLocalRandom.current().nextFloat() * 100 < chance) {
-                    playerPatch.getOriginal().getMainHandItem().getOrCreateTag().putBoolean("performing_efm_critical", true);
-                    HurtEvents.criticalPlayers.add(playerPatch.getOriginal());
+                    player.getMainHandItem().getOrCreateTag().putBoolean("performing_efm_critical", true);
+                    HurtEvents.criticalPlayers.add(player);
                 }
             }
     }
