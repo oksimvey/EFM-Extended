@@ -247,14 +247,17 @@ public interface ItemStackUtils {
         }
 
         float weaponValue = tag.getFloat(valueKey);
-        String operation = tag.getString(valueKey + "_operation");
+        String operationKey = valueKey + "_operation";
+        String operation = tag.contains(operationKey, Tag.TAG_STRING)
+                ? tag.getString(operationKey)
+                : "add";
 
         if ("set".equalsIgnoreCase(operation)){
             return weaponValue;
         }
 
-        // Weapons add to the player's custom attribute by default.
-        // Use "*_operation": "set" only when a weapon must explicitly override it.
+        // "add" is the explicit default for compatibility with weapon JSONs
+        // that define critical values without an operation field.
         return attributeValue + weaponValue;
     }
 }
