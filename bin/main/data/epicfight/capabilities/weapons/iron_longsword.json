@@ -5,8 +5,10 @@
   "dodge_cooldown":60,
   "push_stamina": 25,
   "push_impact": 10,
-  "critical_multiplier": 2.5,
+  "critical_multiplier": 1.5,
+  "critical_multiplier_operation": "add",
   "critical_chance": 25,
+  "critical_chance_operation": "add",
   "heavy_multiplier": 1.5,
   "push_range": 2
 }
